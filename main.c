@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
   int numOfWords = 0; // this variable will tell us how much memory to allocate
   int insertToDictionary = 0;
   if (argc == 4 && strcmp(argv[3], "add") == 0)
-    insertToDictionary = 1;
+    insertToDictionary = 0;
   ////////////////////////////////////////////////////////////////////
   // read dictionary file
   FILE *fp = fopen(dictionaryFilePath, "r");
