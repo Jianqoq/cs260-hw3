@@ -220,8 +220,8 @@ int main(int argc, char **argv) {
           missing1[i] = word[i + 1];
           missing2[i] = word[i];
         }
-        missing1[strlen(word)] = '\0';
-        missing2[strlen(word)] = '\0';
+        missing1[strlen(word) - 1] = '\0';
+        missing2[strlen(word) - 1] = '\0';
         if (is_member(hash_set, missing1))
           printf("%s ", missing1);
         if (is_member(hash_set, missing2))
@@ -258,6 +258,7 @@ int main(int argc, char **argv) {
             printf("%s ", word_cpy);
           strcpy(word_cpy, word);
         }
+        printf("\n");
         free(word_cpy);
       }
 
@@ -312,8 +313,13 @@ int main(int argc, char **argv) {
   }
   free(hash_set->Entries);
   free(hash_set);
+  // HINT: If the flag noTypo is not altered (which you should do in the loop
+  // above if there exists a word not in the dictionary), then you should print
+  // "No typo!"
   if (noTypo == 1)
     printf("No typo!\n");
+
+  // DON'T FORGET to free the memory that you allocated
 
   return 0;
 }
