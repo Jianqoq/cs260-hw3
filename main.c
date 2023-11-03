@@ -16,12 +16,6 @@ typedef struct HashSet {
   size_t size;
 } HashSet;
 
-typedef struct ToAdd {
-  char **words;
-  size_t size;
-  size_t capacity;
-} ToAdd;
-
 size_t hash(char *word, size_t size) {
 
   size_t index = 0;
