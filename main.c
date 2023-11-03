@@ -179,11 +179,6 @@ int main(int argc, char **argv) {
   // HINT: You can use a flag to indicate if there is a misspleed word or not,
   // which is initially set to 1
   int noTypo = 1;
-  char **words_to_add = (char **)malloc(sizeof(char *) * 10);
-  ToAdd *toadd = (ToAdd *)malloc(sizeof(ToAdd));
-  toadd->words = words_to_add;
-  toadd->size = 0;
-  toadd->capacity = 10;
   // read a line from the input file
   while ((lineSize = getline(&line, &lineBuffSize, fp)) != -1) {
     char *word;
@@ -200,17 +195,6 @@ int main(int argc, char **argv) {
       // make sure you are loading the input text as intended
       int mis_spell = is_member(hash_set, word);
       if (!mis_spell) {
-        if (insertToDictionary) {
-          char *copy = (char *)malloc(sizeof(char) * (strlen(word) + 1));
-          strcpy(copy, word);
-          if (toadd->size < toadd->capacity) {
-            toadd->words[toadd->size++] = copy;
-          } else {
-            toadd->words = (char **)realloc(
-                toadd->words, sizeof(char *) * toadd->capacity * 2);
-            toadd->words[toadd->size++] = copy;
-          }
-        }
         noTypo++;
         printf("Misspelled word: %s\n", word);
         printf("Suggestions: "); // the suggested words should follow
@@ -259,6 +243,12 @@ int main(int argc, char **argv) {
           strcpy(word_cpy, word);
         }
         printf("\n");
+
+        if (insertToDictionary) {
+          char *word_cpy2 = (char *)malloc(sizeof(char) * (strlen(word) + 1));
+          strcpy(word_cpy2, word);
+          insert(hash_set, word_cpy2);
+        }
         free(word_cpy);
       }
 
@@ -269,30 +259,6 @@ int main(int argc, char **argv) {
     }
   }
   fclose(fp);
-
-  if (insertToDictionary) {
-    FILE *fp = fopen(dictionaryFilePath, "a+");
-
-    if (fp == NULL) {
-      fprintf(stderr, "Error opening file\n");
-      // free(hash_set->Entries);
-      // free(hash_set);
-      exit(1);
-    }
-    fseek(fp, -1, SEEK_END);
-
-    if (fgetc(fp) != '\n') {
-      fseek(fp, 0, SEEK_END);
-      fprintf(fp, "\n");
-    }
-    for (int i = 0; i < toadd->size; ++i) {
-      fprintf(fp, "%s\n", toadd->words[i]);
-      free(toadd->words[i]);
-    }
-    free(toadd->words);
-    fclose(fp);
-  }
-  free(toadd);
   for (int i = 0; i < hash_set->size; i++) {
     if (hash_set->Entries[i] != NULL) {
       if (hash_set->Entries[i]->next != NULL) {
