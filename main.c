@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
   int numOfWords = 0; // this variable will tell us how much memory to allocate
   int insertToDictionary = 0;
   if (argc == 4 && strcmp(argv[3], "add") == 0)
-    insertToDictionary = 0;
+    insertToDictionary = 1;
   ////////////////////////////////////////////////////////////////////
   // read dictionary file
   FILE *fp = fopen(dictionaryFilePath, "r");
@@ -291,27 +291,27 @@ int main(int argc, char **argv) {
     free(toadd->words);
     fclose(fp);
   }
-  // free(toadd);
-  // for (int i = 0; i < hash_set->size; i++) {
-  //   if (hash_set->Entries[i] != NULL) {
-  //     if (hash_set->Entries[i]->next != NULL) {
-  //       Entry *entry = hash_set->Entries[i]->next;
-  //       while (entry != NULL) {
-  //         free(entry->word);
-  //         Entry *tmp = entry;
-  //         entry = entry->next;
-  //         free(tmp);
-  //       }
-  //       free(hash_set->Entries[i]->word);
-  //       free(hash_set->Entries[i]);
-  //     } else {
-  //       free(hash_set->Entries[i]->word);
-  //       free(hash_set->Entries[i]);
-  //     }
-  //   }
-  // }
-  // free(hash_set->Entries);
-  // free(hash_set);
+  free(toadd);
+  for (int i = 0; i < hash_set->size; i++) {
+    if (hash_set->Entries[i] != NULL) {
+      if (hash_set->Entries[i]->next != NULL) {
+        Entry *entry = hash_set->Entries[i]->next;
+        while (entry != NULL) {
+          free(entry->word);
+          Entry *tmp = entry;
+          entry = entry->next;
+          free(tmp);
+        }
+        free(hash_set->Entries[i]->word);
+        free(hash_set->Entries[i]);
+      } else {
+        free(hash_set->Entries[i]->word);
+        free(hash_set->Entries[i]);
+      }
+    }
+  }
+  free(hash_set->Entries);
+  free(hash_set);
   if (noTypo == 1)
     printf("No typo!\n");
 
